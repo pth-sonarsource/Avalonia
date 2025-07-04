@@ -41,8 +41,16 @@ jobs:
       - name: Build and analyze
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_ARCHITECTURE_EXPORT_GRAPHS: true
+          SONAR_ARCHITECTURE_EXPORT_FLAVOR: true
+          SONAR_ARCHITECTURE_EXPORT_ISSUES: true
         shell: powershell
         run: |
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"pth-sonarsource_Avalonia" /o:"pth-sonarsource" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://dev19.sc-dev19.io"
           dotnet build
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+      - name: Store dna xml & json files
+        uses: actions/upload-artifact@v4
+        with:
+          name: dna-scan-artifacts
+          path: ./.sonarqube/out/architecture/exports/
