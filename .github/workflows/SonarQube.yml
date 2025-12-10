@@ -48,6 +48,7 @@ jobs:
           SONAR_ARCHITECTURE_EXPORT_ISSUES: true
         shell: powershell
         run: |
+          dotnet workload restore
           ${{ runner.temp }}\scanner\dotnet-sonarscanner begin /k:"pth_avalonia" /o:"pth" /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
           dotnet build Avalonia.sln
           ${{ runner.temp }}\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
